@@ -64,7 +64,6 @@ def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS) 
     
     # further tests shows that it works okay with steam and epicgames
 
-    print(response)
     list_of_games = response['list']
     for game in list_of_games:
         if game:    

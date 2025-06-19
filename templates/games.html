@@ -15,61 +15,68 @@ Games
                     <h4>Filters</h4>
                     <a href="#" class="fs-6">Clear</a>
                     <hr>
-
-                    <div class="mx-3 d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>Shop</span>
-                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShop" aria-expanded="true" aria-controls="collapseShop">
-                                toggle
-                            </button>
-                        </div>
-                        <div class="collapse show" id="collapseShop">
-                            <div class="d-flex flex-column mx-3">
-                                <span>Steam</span>
-                                <span>Epic Games</span>
-                                <span>GOG</span>
-
+                    <form action="/games" method="get">
+                        
+                        <div class="mx-3 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Shop</span>
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShop" aria-expanded="true" aria-controls="collapseShop">
+                                    toggle
+                                </button>
                             </div>
+                            <div class="collapse show" id="collapseShop">
+                                <div class="d-flex flex-column mx-3">
 
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="mx-3 d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>Price</span>
-                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrice" aria-expanded="true" aria-controls="collapsePrice">
-                                toggle
-                            </button>
-                        </div>
-                        <div class="collapse show" id="collapsePrice">
-                            <div class="d-flex flex-column mx-3">
-                                <span>Below $1</span>
-                                <span>Below $5</span>
-                                <span>Below $10</span>
-
+                                    <div class="form-check">
+                                        <input name="shops" class="form-check-input" type="checkbox" value="61" id="checkShopSteam">
+                                        <label class="form-check-label" for="checkShopSteam">
+                                            Steam
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="shops" class="form-check-input" type="checkbox" value="16" id="checkShopEpic Games">
+                                        <label class="form-check-label" for="checkShopEpic Games">
+                                            Epic Games
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="shops" class="form-check-input" type="checkbox" value="35" id="checkShopGOG">
+                                        <label class="form-check-label" for="checkShopGOG">
+                                            GOG
+                                        </label>
+                                    </div>
+    
+                                </div>
+    
                             </div>
-
                         </div>
-                    </div>
-                    <hr>
-                    <div class="mx-3 d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>Price Cut</span>
-                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePriceCut" aria-expanded="true" aria-controls="collapsePriceCut">
-                                toggle
-                            </button>
-                        </div>
-                        <div class="collapse show" id="collapsePriceCut">
-                            <div class="d-flex flex-column mx-3">
-                                <span>At least %25 off</span>
-                                <span>At least %50 off</span>
-                                <span>At least %75 off</span>
-                                <span>At least %90 off</span>
-                                <span>free</span>
+                        <hr>
+                        <div class="mx-3 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Price</span>
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrice" aria-expanded="true" aria-controls="collapsePrice">
+                                    toggle
+                                </button>
                             </div>
-
+                            <div class="collapse show px-3 py-2" id="collapsePrice">
+                                <input type="number" name="price" id="priceInput" class="form-control w-100 my-2 fw-light" placeholder="max price">
+                            </div>
                         </div>
-                    </div>
+                        <hr>
+                        <div class="mx-3 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Price Cut</span>
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePriceCut" aria-expanded="true" aria-controls="collapsePriceCut">
+                                    toggle
+                                </button>
+                            </div>
+                            <div class="collapse show px-3 py-2" id="collapsePriceCut">
+                                <input type="number" name="cut" id="cutInput" class="form-control w-100 my-2 fw-light" placeholder="min price cut percentage">
+                            </div>
+                        </div>
+                        <input type="submit" value="Apply Filters" class="btn btn-primary mx-3 my-2">
+                        
+                    </form>
 
                 </div>
             </div>

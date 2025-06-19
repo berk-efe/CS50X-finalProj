@@ -36,11 +36,11 @@ def games():
     else:
         sort = '-trending'
     if request.args.get('shops'):
-        shops = request.args.get('shops')
-        shops = shops.split(',')
+        shops = request.args.getlist('shops')
         shops = list(map(int, shops))
     else:
         shops = DEFAULT_SHOPS
+
 
     deals = get_deals(sort=sort, limit=limit, shops=shops)
     
