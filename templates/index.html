@@ -1,0 +1,78 @@
+
+
+{% extends "base.html" %}
+
+{% block title %}
+Keep Track
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+        <h4>HIGHLIGHTS</h4>
+        <div class="d-flex">
+
+            {% for info in highlights %}
+
+                <div class="card shadow m-2" style="width: 18rem;">
+                    <a href="#" class="m_game_card_anchor">
+                        <img src=" {{ info.boxart }} " style="width: 100%;" class="card-img-top" alt=" {{ info.title }} ">
+                        
+                    </a>
+                    <a href="#" class="text-decoration-none text-white">
+                        <div class="d-flex justify-content-between card-body p-2">
+                            <p class="fs-6 card-title"> {{ info.title }} </p>
+                            <p class="fs-6 card-text"> {{ info.price.amount }} {{ info.price.currency }} / {{ info.regular.amount }} {{ info.regular.currency }} </p>
+                        </div>
+
+                    </a>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="m-5"></div>
+
+    <div class="container">
+        <h4>STORES</h4>
+        <div class="d-flex justify-content-center flex-wrap">
+            <div class="card shadow m-2" style="width: 28rem;">
+                <a href="#" class="m_game_card_anchor">
+                    <img src="https://i.blogs.es/4edc4f/1366_2000/1366_2000.png" style="width: 100%;" class="card-img-top" alt="A Total War Saga: TROY">
+                    
+                </a>
+                <a href="#" class="text-decoration-none text-white">
+                    <div class="d-flex justify-content-between card-body p-2">
+                        <p class="fs-5 card-title">Steam</p>
+                    </div>
+
+                </a>
+            </div>
+            <div class="card shadow m-2" style="width: 28rem;">
+                <a href="#" class="m_game_card_anchor">
+                    <img src="https://www.turunculevye.com/wp-content/uploads/2023/12/Epic-Games-Store-Yilbasi-Ucretsiz-Oyun-Programi-23-Aralik.jpg" style="width: 100%;" class="card-img-top" alt="A Total War Saga: TROY">
+                </a>
+                <a href="#" class="text-decoration-none text-white">
+                    <div class="d-flex justify-content-between card-body p-2">
+                        <p class="fs-5 card-title">Epic Games</p>
+                    </div>
+
+                </a>
+            </div>
+            <div class="card shadow m-2" style="width: 28rem;">
+                <a href="#" class="m_game_card_anchor">
+                    <img src="https://genapilot.ru/wp-content/uploads/2020/03/razrabotchiki-igr-raskritikovali-novuju-sistemu-vozvrata-v-gog.jpg" style="width: 100%;" class="card-img-top" alt="A Total War Saga: TROY">
+                </a>
+                <a href="#" class="text-decoration-none text-white">
+                    <div class="d-flex justify-content-between card-body p-2">
+                        <p class="fs-5 card-title">GOG</p>
+                    </div>
+
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

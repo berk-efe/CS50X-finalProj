@@ -1,0 +1,118 @@
+
+
+{% extends "base.html" %}
+
+{% block title %}
+Games
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="d-flex flex-column mb-3">
+                    <h4>Filters</h4>
+                    <a href="#" class="fs-6">Clear</a>
+                    <hr>
+                    <form action="/games" method="get">
+                        
+                        <div class="mx-3 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Shop</span>
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShop" aria-expanded="true" aria-controls="collapseShop">
+                                    toggle
+                                </button>
+                            </div>
+                            <div class="collapse show" id="collapseShop">
+                                <div class="d-flex flex-column mx-3">
+
+                                    <div class="form-check">
+                                        <input name="shops" class="form-check-input" type="checkbox" value="61" id="checkShopSteam">
+                                        <label class="form-check-label" for="checkShopSteam">
+                                            Steam
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="shops" class="form-check-input" type="checkbox" value="16" id="checkShopEpic Games">
+                                        <label class="form-check-label" for="checkShopEpic Games">
+                                            Epic Games
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="shops" class="form-check-input" type="checkbox" value="35" id="checkShopGOG">
+                                        <label class="form-check-label" for="checkShopGOG">
+                                            GOG
+                                        </label>
+                                    </div>
+    
+                                </div>
+    
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="mx-3 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Price</span>
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrice" aria-expanded="true" aria-controls="collapsePrice">
+                                    toggle
+                                </button>
+                            </div>
+                            <div class="collapse show px-3 py-2" id="collapsePrice">
+                                <input type="number" name="price" id="priceInput" class="form-control w-100 my-2 fw-light" placeholder="max price">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="mx-3 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Price Cut</span>
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePriceCut" aria-expanded="true" aria-controls="collapsePriceCut">
+                                    toggle
+                                </button>
+                            </div>
+                            <div class="collapse show px-3 py-2" id="collapsePriceCut">
+                                <input type="number" name="cut" id="cutInput" class="form-control w-100 my-2 fw-light" placeholder="min price cut percentage">
+                            </div>
+                        </div>
+                        <input type="submit" value="Apply Filters" class="btn btn-primary mx-3 my-2">
+                        
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="d-flex flex-column">
+
+                    {% for deal in deals %}
+                    
+                    <div class="d-flex my-1 justify-content-between align-items-center bg-body-tertiary rounded">
+                        <div class="d-flex align-items-center">
+                            <img src=" {{ deal.banner }} " class="rounded-start" alt=" {{ deal.title }} ">
+                            <span class="fs-5 m-3"> {{ deal.title }} </span>
+                            <span class="fs-6 fw-light text-body-secondary">from  {{ deal.shop.name }} </span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="badge bg-success p-2">
+                                {{ deal.cut }}% off
+                            </span>
+                            <span class="m-3"> 
+                                {{ deal.price.amount }}{{ deal.price.currency }} / 
+                                <s class="text-body-secondary fw-light">
+                                    {{ deal.regular.amount }}{{ deal.regular.currency }}
+                                </s> 
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
