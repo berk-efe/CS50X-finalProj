@@ -4,6 +4,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from helper import DEFAULT_SHOPS
 from helper import get_deals
 
 # Configure application
@@ -25,8 +26,23 @@ def index():
 
 @app.route('/games')
 def games():
+    if request.args.get('limit'):
+        limit = int(request.args.get('limit'))
+    else:
+        limit = 15
+        
+    if request.args.get('sort'):
+        sort = request.args.get('sort')
+    else:
+        sort = '-trending'
+    if request.args.get('shops'):
+        shops = request.args.get('shops')
+        shops = shops.split(',')
+        shops = list(map(int, shops))
+    else:
+        shops = DEFAULT_SHOPS
 
-    deals = get_deals(limit=15)
+    deals = get_deals(sort=sort, limit=limit, shops=shops)
     
     context = {
         'deals': deals
@@ -34,4 +50,6 @@ def games():
 
     return render_template('games.html', **context)
 
-
+@app.route('/about')
+def about():
+    return render_template('about.html')

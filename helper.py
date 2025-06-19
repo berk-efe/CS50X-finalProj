@@ -5,7 +5,9 @@ import requests
 
 from typing import Union
 
-def get_deals(sort:str="-trending", limit:int=6) -> Union[dict, None]:
+DEFAULT_SHOPS = [61, 16, 35, 48]  # Steam, Epic Games, GOG, Microsoft Store
+
+def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS) -> Union[dict, None]:
     """Get deals, you can get deals **sorting** and **limiting**<br>There are several sorting **options** such as:<br>
     **trending:** get the most trending deals
     <br>
@@ -20,6 +22,7 @@ def get_deals(sort:str="-trending", limit:int=6) -> Union[dict, None]:
     Args:
         sort (str, optional): sorting option. Defaults to "-trending".
         limit (int, optional): limit. Defaults to 6.
+        shops (list[int], optional): list of shop IDs to filter deals. Defaults to DEFAULT_SHOPS.
     
     Returns:
         Union[dict, None]: Returns a dictionary with game data or None if an error occurs.
@@ -32,6 +35,7 @@ def get_deals(sort:str="-trending", limit:int=6) -> Union[dict, None]:
     
     title
     assets['boxart']
+    assets['banner300']
     
     deal['shop'] {id, name}
     
@@ -41,19 +45,17 @@ def get_deals(sort:str="-trending", limit:int=6) -> Union[dict, None]:
     deal['cut']
     deal['url']
     """
+    
+    shop_str = ','.join(map(str, shops))
 
-    url = f"https://api.isthereanydeal.com/deals/v2?country=TR&limit={limit}&sort={sort}&shops=61,48,35,16&key={os.environ.get('ITAD_API_KEY')}"
+    url = f"https://api.isthereanydeal.com/deals/v2?country=TR&limit={limit}&sort={sort}&shops={shop_str}&key={os.environ.get('ITAD_API_KEY')}"
 
     payload = {}
     headers = {
     'Cookie': 'PHPSESSID=sv6vbd83btan3s8ipoootf0b57'
     }
 
-    try:
-        response = json.loads(requests.request("GET", url, headers=headers, data=payload).text)
-    except KeyError as e:
-        print(f"An error occurred: {e}")
-        return None
+    response = json.loads(requests.request("GET", url, headers=headers, data=payload).text)
 
     data=[]
     
@@ -65,24 +67,25 @@ def get_deals(sort:str="-trending", limit:int=6) -> Union[dict, None]:
     print(response)
     list_of_games = response['list']
     for game in list_of_games:
-        info={}
-        
-        info['id'] = game['id']
-        info['slug'] = game['slug']
-        
-        info['title'] = game['title']
-        info['boxart'] = game['assets']['boxart']
-        
-        info['shop'] = game['deal']['shop'] # {id, name}
-        
-        info['price'] = game['deal']['price'] # {amount, currency}
-        info['regular'] = game['deal']['regular'] # {amount, currency}
-        
-        info['cut'] = game['deal']['cut']
-        info['url'] = game['deal']['url']
-        
-        data.append(info)
-
+        if game:    
+            info={}
+            
+            info['id'] = game['id']
+            info['slug'] = game['slug']
+            
+            info['title'] = game['title']
+            info['boxart'] = game['assets']['boxart']
+            info['banner'] = game['assets']['banner145']
+            
+            info['shop'] = game['deal']['shop'] # {id, name}
+            
+            info['price'] = game['deal']['price'] # {amount, currency}
+            info['regular'] = game['deal']['regular'] # {amount, currency}
+            
+            info['cut'] = game['deal']['cut']
+            info['url'] = game['deal']['url']
+            
+            data.append(info)
 
     return data if data else None
 

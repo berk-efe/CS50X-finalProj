@@ -76,16 +76,30 @@ Games
             <div class="col-9">
                 <div class="d-flex flex-column">
 
+                    {% for deal in deals %}
                     
                     <div class="d-flex my-1 justify-content-between align-items-center bg-body-tertiary rounded">
                         <div class="d-flex align-items-center">
-                            <img src="https://assets.isthereanydeal.com/0191e1ab-f56a-73c3-a150-9bda3983c160/banner145.jpg?t=1749684600" class="rounded-start" alt="Stellar Blade">
-                            <span class="fs-5 m-3">Stellar Blade</span>
-                            <span class="fs-6 fw-light text-body-secondary">for Steam</span>
+                            <img src=" {{ deal.banner }} " class="rounded-start" alt=" {{ deal.title }} ">
+                            <span class="fs-5 m-3"> {{ deal.title }} </span>
+                            <span class="fs-6 fw-light text-body-secondary">from  {{ deal.shop.name }} </span>
                         </div>
-                        <span class="m-3">$200</span>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="badge bg-success p-2">
+                                {{ deal.cut }}% off
+                            </span>
+                            <span class="m-3"> 
+                                {{ deal.price.amount }}{{ deal.price.currency }} / 
+                                <s class="text-body-secondary fw-light">
+                                    {{ deal.regular.amount }}{{ deal.regular.currency }}
+                                </s> 
+                            </span>
+
+                        </div>
 
                     </div>
+
+                    {% endfor %}
                     
                 </div>
             </div>
