@@ -85,9 +85,9 @@ Games
 
                     {% for deal in deals %}
                     
-                    <div class="d-flex my-1 justify-content-between align-items-center bg-body-tertiary rounded">
+                    <a href=" {{ deal.url }} " target="_blank" class="horizontal_game_card d-flex my-1 justify-content-between align-items-center bg-body-tertiary rounded">
                         <div class="d-flex align-items-center">
-                            <img src=" {{ deal.banner }} " class="rounded-start" alt=" {{ deal.title }} ">
+                            <img  src=" {{ deal.banner }} " class="rounded-start" alt=" {{ deal.title }} ">
                             <span class="fs-5 m-3"> {{ deal.title }} </span>
                             <span class="fs-6 fw-light text-body-secondary">from  {{ deal.shop.name }} </span>
                         </div>
@@ -104,7 +104,7 @@ Games
 
                         </div>
 
-                    </div>
+                    </a>
 
                     {% endfor %}
                     

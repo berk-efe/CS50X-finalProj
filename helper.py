@@ -7,7 +7,16 @@ from typing import Union
 
 DEFAULT_SHOPS = [61, 16, 35, 48]  # Steam, Epic Games, GOG, Microsoft Store
 
-def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS) -> Union[dict, None]:
+API_KEY = os.environ.get('ITAD_API_KEY')
+
+def get_game_by_id(game_id: str) -> Union[dict, None]:
+
+    url = f"https://api.isthereanydeal.com/games/info/v2?id={game_id}&key={API_KEY}"
+    response = requests.request("GET", url)
+
+    return response.json() if response.status_code == 200 else None
+
+def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS, max_price:int=None, min_cut:int=None) -> Union[dict, None]:
     """Get deals, you can get deals **sorting** and **limiting**<br>There are several sorting **options** such as:<br>
     **trending:** get the most trending deals
     <br>
@@ -48,7 +57,7 @@ def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS) 
     
     shop_str = ','.join(map(str, shops))
 
-    url = f"https://api.isthereanydeal.com/deals/v2?country=TR&limit={limit}&sort={sort}&shops={shop_str}&key={os.environ.get('ITAD_API_KEY')}"
+    url = f"https://api.isthereanydeal.com/deals/v2?country=TR&limit={limit*2}&sort={sort}&shops={shop_str}&key={API_KEY}"
 
     payload = {}
     headers = {
@@ -64,25 +73,40 @@ def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS) 
     
     # further tests shows that it works okay with steam and epicgames
 
+    _count = 0
     list_of_games = response['list']
     for game in list_of_games:
-        if game:    
+        if game and _count < limit:
+            _count += 1
+                
             info={}
+            info['price'] = game['deal']['price'] # {amount, currency}
+            info['cut'] = game['deal']['cut']
+            
+            if max_price and info['price']['amount'] > max_price:
+                continue
+            if min_cut and info['cut'] < min_cut:
+                continue
             
             info['id'] = game['id']
             info['slug'] = game['slug']
             
             info['title'] = game['title']
-            info['boxart'] = game['assets']['boxart']
+            
+            try:
+                info['boxart'] = game['assets']['boxart']
+            except KeyError:
+                continue
+            
             info['banner'] = game['assets']['banner145']
             
             info['shop'] = game['deal']['shop'] # {id, name}
             
-            info['price'] = game['deal']['price'] # {amount, currency}
             info['regular'] = game['deal']['regular'] # {amount, currency}
             
-            info['cut'] = game['deal']['cut']
             info['url'] = game['deal']['url']
+            
+            
             
             data.append(info)
 

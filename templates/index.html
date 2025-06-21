@@ -15,14 +15,15 @@ Keep Track
             {% for info in highlights %}
 
                 <div class="card shadow m-2" style="width: 18rem;">
-                    <a href="#" class="m_game_card_anchor">
+                    <a href=" {{ info.url }} " target="_blank" class="m_game_card_anchor">
                         <img src=" {{ info.boxart }} " style="width: 100%;" class="card-img-top" alt=" {{ info.title }} ">
                         
                     </a>
-                    <a href="#" class="text-decoration-none text-white">
-                        <div class="d-flex justify-content-between card-body p-2">
+                    <a href=" {{ info.url }} " target="_blank" class="text-decoration-none text-white">
+                        <div class="d-flex flex-column justify-content-between card-body p-2">
                             <p class="fs-6 card-title"> {{ info.title }} </p>
-                            <p class="fs-6 card-text"> {{ info.price.amount }} {{ info.price.currency }} / {{ info.regular.amount }} {{ info.regular.currency }} </p>
+                            <p class="fs-6"> {{ info.shop.name }} </p>
+                            <p class="fs-6 card-text"> {{ info.price.amount }} {{ info.price.currency }} / <s>{{ info.regular.amount }} {{ info.regular.currency }}</s> </p>
                         </div>
 
                     </a>
@@ -39,8 +40,8 @@ Keep Track
         <h4>STORES</h4>
         <div class="d-flex justify-content-center flex-wrap">
             <div class="card shadow m-2" style="width: 28rem;">
-                <a href="#" class="m_game_card_anchor">
-                    <img src="https://i.blogs.es/4edc4f/1366_2000/1366_2000.png" style="width: 100%;" class="card-img-top" alt="A Total War Saga: TROY">
+                <a href="/games?shops=61" target="_blank" class="m_game_card_anchor">
+                    <img src="https://i.blogs.es/4edc4f/1366_2000/1366_2000.png" style="width: 100%;" class="card-img-top" alt="Steam">
                     
                 </a>
                 <a href="#" class="text-decoration-none text-white">
@@ -51,8 +52,8 @@ Keep Track
                 </a>
             </div>
             <div class="card shadow m-2" style="width: 28rem;">
-                <a href="#" class="m_game_card_anchor">
-                    <img src="https://www.turunculevye.com/wp-content/uploads/2023/12/Epic-Games-Store-Yilbasi-Ucretsiz-Oyun-Programi-23-Aralik.jpg" style="width: 100%;" class="card-img-top" alt="A Total War Saga: TROY">
+                <a href="/games?shops=16" target="_blank" class="m_game_card_anchor">
+                    <img src="https://www.turunculevye.com/wp-content/uploads/2023/12/Epic-Games-Store-Yilbasi-Ucretsiz-Oyun-Programi-23-Aralik.jpg" style="width: 100%;" class="card-img-top" alt="Epic Games">
                 </a>
                 <a href="#" class="text-decoration-none text-white">
                     <div class="d-flex justify-content-between card-body p-2">
@@ -62,8 +63,8 @@ Keep Track
                 </a>
             </div>
             <div class="card shadow m-2" style="width: 28rem;">
-                <a href="#" class="m_game_card_anchor">
-                    <img src="https://genapilot.ru/wp-content/uploads/2020/03/razrabotchiki-igr-raskritikovali-novuju-sistemu-vozvrata-v-gog.jpg" style="width: 100%;" class="card-img-top" alt="A Total War Saga: TROY">
+                <a href="/games?shops=35" target="_blank" class="m_game_card_anchor">
+                    <img src="https://genapilot.ru/wp-content/uploads/2020/03/razrabotchiki-igr-raskritikovali-novuju-sistemu-vozvrata-v-gog.jpg" style="width: 100%;" class="card-img-top" alt="GOG">
                 </a>
                 <a href="#" class="text-decoration-none text-white">
                     <div class="d-flex justify-content-between card-body p-2">
