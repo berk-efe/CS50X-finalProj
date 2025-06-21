@@ -24,6 +24,7 @@ def index():
     
     return render_template('index.html', **context)
 
+
 @app.route('/games')
 def games():
     if request.args.get('limit'):
@@ -35,14 +36,24 @@ def games():
         sort = request.args.get('sort')
     else:
         sort = '-trending'
+        
     if request.args.get('shops'):
         shops = request.args.getlist('shops')
         shops = list(map(int, shops))
     else:
         shops = DEFAULT_SHOPS
 
+    if request.args.get("price"):
+        price = int(request.args.get("price"))
+    else:
+        price = None
 
-    deals = get_deals(sort=sort, limit=limit, shops=shops)
+    if request.args.get("cut"):
+        cut = int(request.args.get("cut"))
+    else:
+        cut = None
+
+    deals = get_deals(sort=sort, limit=limit, shops=shops, max_price=price, min_cut=cut)
     
     context = {
         'deals': deals

@@ -24,5 +24,26 @@ main { flex: 1; }
 
 .m_game_card_anchor:hover img{
     opacity: 0.8;
-    transform: scale(1.05);
+    transform: scale(1.1);
+}
+
+.horizontal_game_card {
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+}
+
+.horizontal_game_card img {
+    height: auto;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.horizontal_game_card:hover {
+    cursor: pointer;
+}
+
+.horizontal_game_card:hover img {
+    opacity: 0.8;
+    transform: scale(1.1);
 }
