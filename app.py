@@ -18,6 +18,17 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///keepTrack.db")
 
+
+@app.context_processor
+def inject_globals():
+    if 'user_id' in session:
+        user = db.execute("SELECT * FROM users WHERE id = ?", session['user_id'])
+        if user:
+            return {'username': user[0]['username'], 'user': user[0]}
+    else:
+        return {}
+
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -77,8 +88,49 @@ def games():
 def about():
     return render_template('about.html')
 
+@app.route('/profile/<username>')
+@login_required
+def profile(username):
+    """Display user profile."""
+    rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+    if len(rows) != 1:
+        return render_template('error.html', message="User not found.")
+
+    user = rows[0]
+
+    # Fetch user's deals
+    favs = db.execute("SELECT * FROM favorites WHERE user_id = ?", user['id'])
+
+    context = {
+        'user': user,
+        'favs': favs
+    }
+
+    return render_template('profile.html', **context)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        if not username:
+            flash("must provide username", "danger")
+            return redirect("/login")
+        elif not password:
+            flash("must provide password", "danger")
+            return redirect("/login")
+        
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
+            flash("invalid username and/or password", "danger")
+            return redirect("/login")
+        
+        session["user_id"] = rows[0]["id"]
+        flash("Logged in successfully.", "success")
+        return redirect("/")
+    
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -130,4 +182,12 @@ def register():
         
     
     return render_template('register.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    """Log user out."""
+    session.clear()
+    flash("Logged out successfully.", "success")
+    return redirect("/")
 
