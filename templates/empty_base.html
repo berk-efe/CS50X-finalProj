@@ -30,27 +30,19 @@
     {% endif %}
     {% endwith %}
 
-        <main>
-            <nav class="shadow-sm navbar navbar-expand-lg mt-3 mb-5 mx-5 bg-body-tertiary rounded position-relative">
-                <div class="container-fluid d-flex justify-content-center align-items-center position-relative">
-                    
-                    <!-- Center group: games, logo, about -->
-                    <div class="d-flex align-items-center gap-4">
-                        <a class="nav-link" href="/games">Games</a>
-                        <a class="navbar-brand fs-3" href="/">Keep Track</a>
-                        <a class="nav-link" href="/about">About</a>
-                    </div>
 
-                    <!-- Right-aligned login icon -->
-                    
-                    
-                    <a href="/register" class="position-absolute end-0 me-3">
-                        <i class="bi bi-person-add fs-3"></i>
-                    </a>
+
+
+        <main>
+            <nav class="navbar navbar-expand-lg m-3 mx-5  rounded position-relative">
+                <div class="container-fluid d-flex justify-content-center align-items-center position-relative">
+                    <a class="navbar-brand fs-1" href="/">Keep Track</a>
+                        
 
                 </div>
             </nav>
 
+            <hr>
 
             {% block main %}
             {% endblock %}
