@@ -1,12 +1,12 @@
 import os
 
-from cs50 import SQL
+
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helper import DEFAULT_SHOPS
-from helper import get_deals, login_required
+from helper import DEFAULT_SHOPS, db
+from helper import get_deals, login_required, get_game_by_id
 
 # Configure application
 app = Flask(__name__)
@@ -15,8 +15,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///keepTrack.db")
 
 
 @app.context_processor
@@ -76,7 +74,10 @@ def games():
     else:
         cut = None
 
-    deals = get_deals(sort=sort, limit=limit, shops=shops, max_price=price, min_cut=cut)
+    deals = get_deals(sort=sort, limit=limit, shops=shops, max_price=price, min_cut=cut, user_id=session.get('user_id'))
+    
+    user_id = session.get('user_id')
+    
     
     context = {
         'deals': deals
@@ -95,13 +96,25 @@ def profile(username):
     rows = db.execute("SELECT * FROM users WHERE username = ?", username)
 
     if len(rows) != 1:
-        return render_template('error.html', message="User not found.")
+        flash("User not found.", "danger")
+        return redirect("/")
 
     user = rows[0]
 
-    # Fetch user's deals
-    favs = db.execute("SELECT * FROM favorites WHERE user_id = ?", user['id'])
-
+    # Fetch user's favorite game ids
+    fav_ids = db.execute("SELECT game_id FROM favorites WHERE user_id = ?", user['id'])
+    
+    print(f"Favorite IDs for user {user['username']}: {fav_ids}")
+    
+    favs = []
+    if fav_ids:
+        fav_ids = [fav['game_id'] for fav in fav_ids]
+        for id in fav_ids:
+            game = get_game_by_id(game_id=id)
+            favs.append(game)
+            
+    print(favs)
+        
     context = {
         'user': user,
         'favs': favs
@@ -191,3 +204,53 @@ def logout():
     flash("Logged out successfully.", "success")
     return redirect("/")
 
+@app.route('/post/favorite', methods=['POST'])
+@login_required
+def post_favorite():
+    """Add a game to favorites."""
+    game_id = request.form.get("game_id")
+    
+    if not game_id:
+        flash("Game ID is required.", "danger")
+        return redirect("/games")
+
+    user_id = session['user_id']
+    
+    # Check if the game is already favorited
+    existing_fav = db.execute("SELECT * FROM favorites WHERE user_id = ? AND game_id = ?", user_id, game_id)
+    
+    if existing_fav:
+        flash("Game is already in your favorites.", "info")
+        return redirect("/games")
+    
+    # Insert the favorite
+    db.execute("INSERT INTO favorites (user_id, game_id) VALUES (?, ?)", user_id, game_id)
+    flash("Game added to favorites!", "success")
+    
+    return redirect("/games")
+
+
+@app.route('/post/unfavorite', methods=['POST'])
+@login_required
+def post_unfavorite():
+    """Remove a game from favorites."""
+    game_id = request.form.get("game_id")
+    
+    if not game_id:
+        flash("Game ID is required.", "danger")
+        return redirect("/games")
+
+    user_id = session['user_id']
+    
+    # Check if the game is favorited
+    existing_fav = db.execute("SELECT * FROM favorites WHERE user_id = ? AND game_id = ?", user_id, game_id)
+    
+    if not existing_fav:
+        flash("Game is not in your favorites.", "info")
+        return redirect("/games")
+    
+    # Delete the favorite
+    db.execute("DELETE FROM favorites WHERE user_id = ? AND game_id = ?", user_id, game_id)
+    flash("Game removed from favorites!", "success")
+    
+    return redirect("/games")
