@@ -1,9 +1,19 @@
 import os
 
+
+from cs50 import SQL
+
 import json
 import requests
 
+from flask import redirect, render_template, session
+from functools import wraps
+
 from typing import Union
+
+
+# Configure CS50 Library to use SQLite database
+db = SQL("sqlite:///keepTrack.db")
 
 DEFAULT_SHOPS = [61, 16, 35, 48]  # Steam, Epic Games, GOG, Microsoft Store
 
@@ -13,10 +23,11 @@ def get_game_by_id(game_id: str) -> Union[dict, None]:
 
     url = f"https://api.isthereanydeal.com/games/info/v2?id={game_id}&key={API_KEY}"
     response = requests.request("GET", url)
+    print(f"Requesting game info for ID: {game_id}, Status Code: {response.status_code}")
 
     return response.json() if response.status_code == 200 else None
 
-def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS, max_price:int=None, min_cut:int=None) -> Union[dict, None]:
+def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS, max_price:int=None, min_cut:int=None, user_id:str=None) -> Union[dict, None]:
     """Get deals, you can get deals **sorting** and **limiting**<br>There are several sorting **options** such as:<br>
     **trending:** get the most trending deals
     <br>
@@ -106,9 +117,27 @@ def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS, 
             
             info['url'] = game['deal']['url']
             
-            
+            if user_id:
+                favs = db.execute("SELECT * FROM deals WHERE user_id = ? AND game_id = ?", user_id, info['id'])
+                info['is_fav'] = len(favs) > 0
+            else:
+                info['is_fav'] = False
             
             data.append(info)
 
     return data if data else None
 
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+
+    return decorated_function

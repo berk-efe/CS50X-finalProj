@@ -1,0 +1,43 @@
+<nav class="shadow-sm navbar navbar-expand-lg mt-3 mb-5 mx-5 bg-body-tertiary rounded position-relative">
+                <div class="container-fluid d-flex justify-content-center align-items-center position-relative">
+                    
+                    <!-- Center group: games, logo, about -->
+                    <div class="d-flex align-items-center gap-4">
+                        <a class="nav-link" href="/games">Games</a>
+                        <a class="navbar-brand fs-3" href="/">Keep Track</a>
+                        <a class="nav-link" href="/about">About</a>
+                    </div>
+
+                    <!-- Right-aligned login icon -->
+                    
+                    {% if session["user_id"] %}
+                    
+                    <div class="position-absolute end-0 me-4">
+                        <a href="/profile/{{ username }}" class="text-decoration-none mx-2">
+                            profile
+                        </a>
+                        <a href="/logout" class="text-decoration-none mx-2">
+                            logout
+                        </a>
+                    </div>
+
+
+                    {% else %}
+
+                    <div class="position-absolute end-0 me-3">
+                        <a href="/login" class="text-decoration-none mx-2">
+                            login
+                        </a>
+                        <a href="/register" class="text-decoration-none mx-2">
+                            register
+                        </a>
+
+                    </div>
+
+                    
+                    {% endif %}
+                    
+
+
+                </div>
+            </nav>

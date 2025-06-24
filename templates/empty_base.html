@@ -6,7 +6,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-        <link href=" {{ url_for('static', filename='styles.css') }} " rel="stylesheet">
+        <link href="static/styles.css" rel="stylesheet">
         <title>
             {% block title %}
             {% endblock %}
@@ -30,9 +30,19 @@
     {% endif %}
     {% endwith %}
 
-        <main>
-            {% include 'navbar.html' %}
 
+
+
+        <main>
+            <nav class="navbar navbar-expand-lg m-3 mx-5  rounded position-relative">
+                <div class="container-fluid d-flex justify-content-center align-items-center position-relative">
+                    <a class="navbar-brand fs-1" href="/">Keep Track</a>
+                        
+
+                </div>
+            </nav>
+
+            <hr>
 
             {% block main %}
             {% endblock %}

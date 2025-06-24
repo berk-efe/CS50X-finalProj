@@ -1,0 +1,43 @@
+{% extends 'empty_base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block main %}
+
+<div class="d-flex align-items-center justify-content-center">
+    <div class="card text-center mx-auto mt-5" style="min-width: 350px; width: 20vw; min-height: 45vh ;">
+        <div class="card-header">
+            Login
+        </div>
+        
+        <div class="card-body p-4">
+            <form action="/login" method="POST" class="mt-4">
+                <div class="form-floating my-3">
+                    <input type="text" name="username" class="form-control" id="floatingInput" placeholder="username">
+                    <label for="floatingInput">Username</label>
+                </div>
+                <div class="form-floating my-3">
+                    <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+
+                <input type="submit" class="btn btn-primary mt-5 m-3" value="Login"> 
+
+                
+            </form>
+            
+        </div>
+        
+        <div class="card-footer text-body-secondary">
+            <div class="text-secondary m-3">Do not have an account?
+                <a href="/register" class="">Register</a>
+            </div>
+            
+        </div>
+    </div>
+        
+
+</div>
+{% endblock %}

@@ -8,7 +8,7 @@ Games
 
 {% block main %}
 
-    <div class="container">
+    <div class="" style="margin: 0 10vw;">
         <div class="row">
             <div class="col">
                 <div class="d-flex flex-column mb-3">
@@ -85,26 +85,58 @@ Games
 
                     {% for deal in deals %}
                     
-                    <a href=" {{ deal.url }} " target="_blank" class="horizontal_game_card d-flex my-1 justify-content-between align-items-center bg-body-tertiary rounded">
-                        <div class="d-flex align-items-center">
-                            <img  src=" {{ deal.banner }} " class="rounded-start" alt=" {{ deal.title }} ">
-                            <span class="fs-5 m-3"> {{ deal.title }} </span>
-                            <span class="fs-6 fw-light text-body-secondary">from  {{ deal.shop.name }} </span>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span class="badge bg-success p-2">
-                                {{ deal.cut }}% off
-                            </span>
-                            <span class="m-3"> 
-                                {{ deal.price.amount }}{{ deal.price.currency }} / 
-                                <s class="text-body-secondary fw-light">
-                                    {{ deal.regular.amount }}{{ deal.regular.currency }}
-                                </s> 
-                            </span>
+                    <div class="d-flex align-items-center justify-content-between ">
+                        <a href=" {{ deal.url }} " target="_blank" class="flex-grow-1 horizontal_game_card d-flex my-1 justify-content-between align-items-center bg-body-tertiary rounded">
+                            <div class="d-flex align-items-center">
+                                <img  src=" {{ deal.banner }} " class="rounded-start" alt=" {{ deal.title }} ">
+                                <span class="fs-5 m-3"> {{ deal.title }} </span>
+                                <span class="fs-6 fw-light text-body-secondary">from  {{ deal.shop.name }} </span>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="badge bg-success p-2">
+                                    {{ deal.cut }}% off
+                                </span>
+                                <span class="m-3"> 
+                                    {{ deal.price.amount }}{{ deal.price.currency }} / 
+                                    <s class="text-body-secondary fw-light">
+                                        {{ deal.regular.amount }}{{ deal.regular.currency }}
+                                    </s> 
+                                </span>
+    
+                            </div>
+    
+                        </a>
 
-                        </div>
+                        {% if deal.is_fav %}
 
-                    </a>
+                        <form action="/post/remove_deal" method="post">
+                            <input type="hidden" name="game_id" value="{{ deal.id }}">
+                            <button type="submit" class="btn btn-success m-2">
+                                <i class="bi bi-star-fill"></i>
+                            </button>
+                        </form>
+                        
+                        {% else %}
+                        <form action="/post/add_deal" method="post">
+                            <input type="hidden" name="id" value="{{ deal.id }}">
+                            <input type="hidden" name="title" value="{{ deal.title }}">
+                            <input type="hidden" name="banner" value="{{ deal.banner }}">
+                            <input type="hidden" name="url" value="{{ deal.url }}">
+                            <input type="hidden" name="price" value="{{ deal.price.amount }}">
+                            <input type="hidden" name="regular" value="{{ deal.regular.amount }}">
+                            <input type="hidden" name="currency" value="{{ deal.price.currency }}">
+                            <input type="hidden" name="cut" value="{{ deal.cut }}">
+                            <input type="hidden" name="shop_name" value="{{ deal.shop.name }}">
+                            <button type="submit" class="btn btn-outline-success m-2">
+                                <i class="bi bi-star"></i>
+                            </button>
+                        </form>
+                        
+                        
+                        {% endif %}
+
+                    </div>
+
 
                     {% endfor %}
                     
