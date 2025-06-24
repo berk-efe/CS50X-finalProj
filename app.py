@@ -102,22 +102,30 @@ def profile(username):
     user = rows[0]
 
     # Fetch user's favorite game ids
-    fav_ids = db.execute("SELECT game_id FROM favorites WHERE user_id = ?", user['id'])
+    fav = db.execute("SELECT game_id, game_title, game_banner, game_url, game_price, game_regular, game_cut, game_shop_name, currency FROM deals WHERE user_id = ?", user['id'])
     
-    print(f"Favorite IDs for user {user['username']}: {fav_ids}")
+    deals = []
     
-    favs = []
-    if fav_ids:
-        fav_ids = [fav['game_id'] for fav in fav_ids]
-        for id in fav_ids:
-            game = get_game_by_id(game_id=id)
-            favs.append(game)
-            
-    print(favs)
+    
+    if fav:
+        for deal in fav:
+            deals.append({
+                'id': deal['game_id'],
+                'title': deal['game_title'],
+                'banner': deal['game_banner'],
+                'url': deal['game_url'],
+                'price': deal['game_price'],
+                'regular': deal['game_regular'],
+                'currency': deal['currency'],
+                'cut': deal['game_cut'],
+                'shop': deal['game_shop_name']
+            })
+    
+    print(f"Deals for user {user['username']}: \n\n{deals}\n\n")
         
     context = {
         'user': user,
-        'favs': favs
+        'deals': deals
     }
 
     return render_template('profile.html', **context)
@@ -204,11 +212,19 @@ def logout():
     flash("Logged out successfully.", "success")
     return redirect("/")
 
-@app.route('/post/favorite', methods=['POST'])
+@app.route('/post/add_deal', methods=['POST'])
 @login_required
-def post_favorite():
-    """Add a game to favorites."""
-    game_id = request.form.get("game_id")
+def post_add_deal():
+    game_id = request.form.get("id")
+    game_title = request.form.get("title")
+    game_banner = request.form.get("banner")
+    game_url = request.form.get("url")
+    game_price = request.form.get("price")
+    game_regular = request.form.get("regular")
+    game_cut = request.form.get("cut")
+    game_currency = request.form.get("currency")
+    game_shop_name = request.form.get("shop_name")
+    
     
     if not game_id:
         flash("Game ID is required.", "danger")
@@ -217,23 +233,27 @@ def post_favorite():
     user_id = session['user_id']
     
     # Check if the game is already favorited
-    existing_fav = db.execute("SELECT * FROM favorites WHERE user_id = ? AND game_id = ?", user_id, game_id)
+    existing_fav = db.execute("SELECT * FROM deals WHERE user_id = ? AND game_id = ?", user_id, game_id)
     
     if existing_fav:
         flash("Game is already in your favorites.", "info")
         return redirect("/games")
     
     # Insert the favorite
-    db.execute("INSERT INTO favorites (user_id, game_id) VALUES (?, ?)", user_id, game_id)
-    flash("Game added to favorites!", "success")
+    db.execute(
+        "INSERT INTO deals (user_id, game_id, game_title, game_banner, game_url, game_price, game_regular, game_cut, game_shop_name, currency) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        user_id, game_id, game_title, game_banner, game_url, game_price, game_regular, game_cut, game_shop_name, game_currency
+    )
+    
+    flash("Game added to your saved deals!", "success")
+
     
     return redirect("/games")
 
 
-@app.route('/post/unfavorite', methods=['POST'])
+@app.route('/post/remove_deal', methods=['POST'])
 @login_required
-def post_unfavorite():
-    """Remove a game from favorites."""
+def post_remove_deal():
     game_id = request.form.get("game_id")
     
     if not game_id:
@@ -243,14 +263,14 @@ def post_unfavorite():
     user_id = session['user_id']
     
     # Check if the game is favorited
-    existing_fav = db.execute("SELECT * FROM favorites WHERE user_id = ? AND game_id = ?", user_id, game_id)
+    existing_fav = db.execute("SELECT * FROM deals WHERE user_id = ? AND game_id = ?", user_id, game_id)
     
     if not existing_fav:
-        flash("Game is not in your favorites.", "info")
+        flash("Game is not in your deals.", "info")
         return redirect("/games")
     
     # Delete the favorite
-    db.execute("DELETE FROM favorites WHERE user_id = ? AND game_id = ?", user_id, game_id)
-    flash("Game removed from favorites!", "success")
+    db.execute("DELETE FROM deals WHERE user_id = ? AND game_id = ?", user_id, game_id)
+    flash("Game removed from your saved deals!", "success")
     
     return redirect("/games")

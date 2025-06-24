@@ -109,7 +109,7 @@ Games
 
                         {% if deal.is_fav %}
 
-                        <form action="/post/unfavorite" method="post">
+                        <form action="/post/remove_deal" method="post">
                             <input type="hidden" name="game_id" value="{{ deal.id }}">
                             <button type="submit" class="btn btn-success m-2">
                                 <i class="bi bi-star-fill"></i>
@@ -117,8 +117,16 @@ Games
                         </form>
                         
                         {% else %}
-                        <form action="/post/favorite" method="post">
-                            <input type="hidden" name="game_id" value="{{ deal.id }}">
+                        <form action="/post/add_deal" method="post">
+                            <input type="hidden" name="id" value="{{ deal.id }}">
+                            <input type="hidden" name="title" value="{{ deal.title }}">
+                            <input type="hidden" name="banner" value="{{ deal.banner }}">
+                            <input type="hidden" name="url" value="{{ deal.url }}">
+                            <input type="hidden" name="price" value="{{ deal.price.amount }}">
+                            <input type="hidden" name="regular" value="{{ deal.regular.amount }}">
+                            <input type="hidden" name="currency" value="{{ deal.price.currency }}">
+                            <input type="hidden" name="cut" value="{{ deal.cut }}">
+                            <input type="hidden" name="shop_name" value="{{ deal.shop.name }}">
                             <button type="submit" class="btn btn-outline-success m-2">
                                 <i class="bi bi-star"></i>
                             </button>

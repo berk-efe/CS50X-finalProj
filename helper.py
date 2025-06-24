@@ -118,7 +118,7 @@ def get_deals(sort:str="-trending", limit:int=6, shops:list[int]=DEFAULT_SHOPS, 
             info['url'] = game['deal']['url']
             
             if user_id:
-                favs = db.execute("SELECT * FROM favorites WHERE user_id = ? AND game_id = ?", user_id, info['id'])
+                favs = db.execute("SELECT * FROM deals WHERE user_id = ? AND game_id = ?", user_id, info['id'])
                 info['is_fav'] = len(favs) > 0
             else:
                 info['is_fav'] = False
